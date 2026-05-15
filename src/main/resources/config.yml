@@ -1,0 +1,5 @@
+game:
+  min_players: 1
+  countdown: 15
+  team_size: 2
+  respawn_delay: 5
