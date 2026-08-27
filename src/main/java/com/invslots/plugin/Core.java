@@ -1,7 +1,10 @@
 package com.invslots.plugin;
 
 import com.invslots.plugin.config.Config;
-import com.invslots.plugin.globals.Messages;
+import com.invslots.plugin.events.ClickListener;
+import com.invslots.plugin.events.DeathListener;
+import com.invslots.plugin.events.JoinQuitListener;
+import com.invslots.plugin.services.SlotService;
 import com.invslots.plugin.user.UserManager;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
@@ -10,12 +13,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.List;
-
 public class Core extends JavaPlugin {
 	/* configs */
-	@Getter private static Config messages;
 	@Getter private static Config cfg;
+
+	/* variables */
+	@Getter private static int SLOTS = 9;
+
+	/* services */
+	@Getter private SlotService slotService;
 
 	void registerEvent(Listener listener) {
 		getServer().getPluginManager().registerEvents(listener, this);
@@ -23,12 +29,9 @@ public class Core extends JavaPlugin {
 
 	void registerEvents() {
 		registerEvent(new UserManager());
-	}
-
-	void registerCommands() {
-		getServer().getCommandMap().registerAll("invslots", List.of(
-
-		));
+		registerEvent(new ClickListener());
+		registerEvent(new DeathListener());
+		registerEvent(new JoinQuitListener(slotService));
 	}
 
 	@Override
@@ -37,11 +40,16 @@ public class Core extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		messages = new Config(this, Messages.class, "messages.yml");
+		/* configs */
 		cfg = new Config(this, Object.class, "config.yml");
 
+		/* variables */
+		SLOTS = cfg.getInt("slots");
+
+		/* services */
+		slotService = new SlotService();
+
 		registerEvents();
-		registerCommands();
 
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
