@@ -30,7 +30,7 @@ public class Core extends JavaPlugin {
 	void registerEvents() {
 		registerEvent(new UserManager());
 		registerEvent(new ClickListener());
-		registerEvent(new DeathListener());
+		registerEvent(new DeathListener(slotService));
 		registerEvent(new JoinQuitListener(slotService));
 	}
 

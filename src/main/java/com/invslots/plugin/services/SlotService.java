@@ -18,7 +18,7 @@ public class SlotService implements Listener {
 		ib.setDisplayName("&0#");
 		ib.addPersistentContainer(Keys.BLOCKED_SLOT, PersistentDataType.BOOLEAN, true);
 
-		for (int i = Core.getSLOTS()-1; i < 35; i++) {
+		for (int i = Core.getSLOTS(); i < 35; i++) {
 			inv.setItem(i, ib.build());
 		}
 	}
